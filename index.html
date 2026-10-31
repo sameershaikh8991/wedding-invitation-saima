@@ -1520,6 +1520,26 @@
         opacity: 0;
         transition: opacity 0.4s;
       }
+      /* couple illustration on the invitation card */
+      .card .cpl {
+        width: min(46vw, 27vh, 190px);
+        aspect-ratio: 1 / 1;
+        margin: 0 auto 16px;
+        border: 1.5px solid #c8a25a;
+        border-radius: 999px 999px 14px 14px;
+        overflow: hidden;
+        background: #fdf4ea;
+        box-shadow: 0 8px 22px rgba(138, 90, 90, 0.25), 0 0 0 4px rgba(200, 162, 90, 0.18);
+      }
+      .card .cpl img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 70%;
+        display: block;
+        transform: scale(1.15);
+        transform-origin: 50% 72%;
+      }
     </style>
   </head>
   <body>
@@ -1595,6 +1615,7 @@
         brideParents: "Daughter of Mr. & Mrs. Siddiqui",
         photos: {
           hero: "",
+          couple: "couple.jpg",
           nikah: "",
           walima: "",
           venue: "",
@@ -1654,12 +1675,12 @@ ${img ? `<div class="pic rv"><div class="mask"><div class="px" ${bg(img)}></div>
 
       function build() {
         document.title = `${C.bride} & ${C.groom} · Nikah Invitation`;
-        $("#intro").innerHTML = `<button id="skip">Skip ›</button>
-<div class="ttl">Nikah Invitation</div><div class="env" id="env"><div class="back"></div><div class="letter"><span class="sc" style="font-size:1.8rem">Bismillah</span></div><div class="pocket"></div><div class="frame"></div>${corner("tl")}${corner("br", 0)}
+        $("#intro").innerHTML = `<div class="ttl">Nikah Invitation</div><div class="env" id="env"><div class="back"></div><div class="letter"><span class="sc" style="font-size:1.8rem">Bismillah</span></div><div class="pocket"></div><div class="frame"></div>${corner("tl")}${corner("br", 0)}
 <div class="flap"></div><div class="seal"><svg viewBox="-50 -50 100 100"><use href="#fl" x="-50" y="-50" width="100" height="100" style="color:#fff"/></svg></div>
 <div class="nm">You are invited<b class="sc">${C.bride} &amp; ${C.groom}</b></div></div>
 <div class="hint">Tap to open invitation</div>
 <div class="card" id="card">${corner("tl")}${corner("br", 0)}
+${C.photos.couple ? `<div class="st cpl"><img src="${C.photos.couple}" alt="${C.bride} &amp; ${C.groom}" onerror="this.parentNode.style.display='none'"></div>` : ""}
 <div class="st"><small>Together with our families<br>request the pleasure of your company at the Nikah ceremony of</small></div>
 <div class="st sc big">${C.bride}</div><div class="st gold" style="font-size:1.6rem">&amp;</div><div class="st sc big">${C.groom}</div>
 <div class="st line"></div><div class="st"><small>${fD(C.wedding)}</small></div></div>
@@ -2036,10 +2057,11 @@ ${C.photos.venue ? `<div class="pic rv"><div class="mask"><div class="px" ${bg(C
       html.classList.add("lock");
       if (!muted) music(1);
       $("#env").onclick = openEnv;
-      $("#skip").onclick = finish;
       $("#explore").onclick = finish;
       $("#replay").onclick = replay;
-      $("#rsvp").onsubmit = (e) => {
+      /* RSVP form is optional: only attach the handler if the form exists */
+      const rsvpForm = $("#rsvp");
+      if (rsvpForm) rsvpForm.onsubmit = (e) => {
         e.preventDefault();
         const yes =
             document.querySelector("input[name=at]:checked").value === "yes",
