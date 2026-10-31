@@ -22,7 +22,7 @@ button,.btn{font:inherit;cursor:pointer;border:1px solid var(--go);background:va
 #intro{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at 50% 40%,#fff 0,var(--iv) 55%,var(--bl) 140%);display:flex;flex-direction:column;align-items:center;justify-content:center;perspective:1200px;transition:opacity 1.2s ease .2s;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
 #intro[hidden]{display:none}
 #intro.out{opacity:0;pointer-events:none}
-#skip{position:absolute;top:calc(14px + env(safe-area-inset-top));right:16px;background:none;color:var(--ro);box-shadow:none;border:0;padding:.5em 1em;z-index:5}
+#skip{position:absolute;top:calc(14px + env(safe-area-inset-top));left:16px;background:none;color:var(--ro);box-shadow:none;border:0;padding:.5em 1em;z-index:5}
 .env{position:relative;width:min(88vw,340px);height:230px;cursor:pointer;transform-style:preserve-3d;transition:transform 1s ease 1.8s,opacity .9s ease 1.8s;filter:drop-shadow(0 18px 24px #8a5a5a40)}
 .env.open{transform:translateY(55vh);opacity:0;cursor:default}
 .env .back{position:absolute;inset:0;background:linear-gradient(145deg,#f3d6d3,var(--bl));border-radius:6px;z-index:0}
@@ -209,7 +209,7 @@ button,.btn{background:linear-gradient(135deg,#F3DDA3,#C8A25A);color:#0B1F3A;fon
 use[style*="EBC8C5"]{color:#F3D3CF!important}[stroke="#C98F91"]{stroke:#b9777a}circle[fill="#D4AF72"]{fill:#C8A25A}
 .petal{background:linear-gradient(135deg,#fff,#f3c9c5);box-shadow:none}
 #fx{display:none}
-#mus{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:150;width:48px;height:48px;padding:0;border-radius:50%;font-size:1.5rem;line-height:1;display:grid;place-items:center;letter-spacing:0;box-shadow:0 6px 18px #0005}
+#mus{position:fixed;right:14px;top:calc(14px + env(safe-area-inset-top));z-index:150;width:48px;height:48px;padding:0;border-radius:50%;font-size:1.5rem;line-height:1;display:grid;place-items:center;letter-spacing:0;box-shadow:0 6px 18px #0005}
 #mus::after{display:none}
 #mus.off::before{content:"";position:absolute;width:2px;height:62%;background:#0B1F3A;transform:rotate(45deg)}
 .mono{width:230px;height:230px;border-radius:50%;background:none;box-shadow:none;display:grid;place-items:center;margin-top:30px}
@@ -236,7 +236,7 @@ use[style*="EBC8C5"]{color:#F3D3CF!important}[stroke="#C98F91"]{stroke:#b9777a}c
 /* ===== CENTRAL CONFIGURATION: edit here, the whole site updates ===== */
 const C={
   groom:"Fahim",bride:"Saima",
-  // groomParents:"Son of Mr. & Mrs. Khan",brideParents:"Daughter of Mr. & Mrs. Siddiqui",
+  groomParents:"Son of Mr. & Mrs. Khan",brideParents:"Daughter of Mr. & Mrs. Siddiqui",
   photos:{hero:"",nikah:"",walima:"",venue:""}, /* paste image URLs or data: URIs; blank = floral gradient */
   wedding:"2026-11-22T19:00:00+05:30",
   nikah:{name:"Nikah Ceremony",iso:"2026-11-22T19:00:00+05:30",venue:"Haji Mujahid Khot Celebration Hall",address:"Kalyan Highway, Karjat Road, Neral, Raigad, Maharashtra 410101"},
@@ -282,6 +282,7 @@ function build(){
 <div class="mono rv">${med().replace('<div class="med rv">','<div class="wr">')}<div class="mi"><span class="sc">${C.bride[0]}</span><i>&amp;</i><span class="sc">${C.groom[0]}</span></div></div><div class="rv" style="letter-spacing:.3em;text-transform:uppercase;font-size:.9rem;margin-top:18px">The Nikah Of</div>
 <div class="sc rv">${C.bride}</div><div class="amp rv">&amp;</div><div class="sc rv">${C.groom}</div>
 <p class="rv" style="margin-top:14px">${fD(C.wedding)}</p>
+<p class="rv" style="font-size:.9rem;opacity:.85;max-width:30ch">${C.brideParents}<br>${C.groomParents}</p>
 <div class="rv" style="margin-top:24px;animation:pulse 2s infinite">Scroll ↓</div></section>
 
 <section class="s a">${corner('tl')}${corner('tr',0)}${corner('bl',0)}${corner('br')}
@@ -302,6 +303,13 @@ ${C.photos.venue?`<div class="pic rv"><div class="mask"><div class="px" ${bg(C.p
 <p class="venue rv">${C.nikah.venue}</p><p class="addr rv">${C.nikah.address}</p>
 <div class="row rv"><a class="btn" target="_blank" rel="noopener" href="${C.mapsUrl}">Open in Google Maps</a><a class="btn o" target="_blank" rel="noopener" href="${dir(C.nikah.venue+' '+C.nikah.address)}">Navigate</a></div></section>
 
+<section class="s a">${corner('tl')}${corner('br',0)}
+<h2 class="sc rv" style="font-size:2.8rem">RSVP</h2><p class="rv">Kindly respond by ${C.rsvp.deadline}</p>
+<form id="rsvp" class="rv"><input id="gn" placeholder="Your name" required autocomplete="name">
+<select id="gc">${Array.from({length:C.rsvp.maxGuests},(_,i)=>`<option value="${i+1}">${i+1} guest${i?'s':''}</option>`).join('')}</select>
+<div class="opt"><label><input type="radio" name="at" value="yes" checked><span>Joyfully accept</span></label><label><input type="radio" name="at" value="no"><span>Regretfully decline</span></label></div>
+<textarea id="gm" rows="3" placeholder="Message for the couple (optional)"></textarea>
+<button type="submit">Confirm on WhatsApp</button></form></section>
 
 <section class="s close">${corner('tl')}${corner('tr',0)}${corner('bl',0)}${corner('br')}<div id="pt" class="bg"></div>
 <div class="ar rv">${DUA}</div><p class="msg rv" style="font-size:1.2rem">${C.dua}</p><div class="line"></div>
@@ -319,7 +327,7 @@ function tick(){
 }
 
 function fx(){const d=document.createElement('div');d.id='fx';d.innerHTML=Array.from({length:12},()=>`<i class="petal" style="left:${Math.random()*100}%;animation-duration:${9+Math.random()*9}s;animation-delay:-${Math.random()*14}s;transform:scale(${.5+Math.random()*.7})"></i>`).join('');document.body.appendChild(d)}
-let ac,mg,on=false,muted=false,seqOn=false;
+let ac,mg,on=false,muted=false,seqOn=false;/* no mute button: music always plays */
 function note(f,t,d,type,v,a){const o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+a);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(mg);o.start(t);o.stop(t+d+.1)}
 function seq(){const ch=[[146.8,220,293.7,369.99],[110,220,277.2,329.6],[123.5,246.9,293.7,369.99],[98,196,246.9,293.7]];let i=0;
   const bar=()=>{const c=ch[i++%4],t=ac.currentTime+.05;c.forEach(f=>note(f,t,5,'sine',.05,1.6));for(let k=0;k<8;k++)note(c[k%4]*2*(k>3?1:1),t+k*.5,1.6,'triangle',.07,.02);};
@@ -335,10 +343,17 @@ function fadeTo(v,ms){clearInterval(fade);const s=au.volume,t0=performance.now()
 function music(go){
   if(!au){au=new Audio('music.mp3');au.loop=true;au.volume=0;au.preload='auto';au.addEventListener('error',()=>{fileOk=false;if(on)synth(1)})}
   if(!fileOk){synth(go);return}
-  if(go){au.play().catch(e=>{if(e&&e.name!=='NotAllowedError'){fileOk=false;synth(1)}});fadeTo(.7,2000);on=true}
+  if(go){on=true;au.play().catch(e=>{if(e&&e.name==='NotAllowedError'){on=false;au.volume=0;const b=$('#mus');if(b)b.classList.add('off');armAuto()}else{fileOk=false;synth(1)}});fadeTo(.7,2000)}
   else{fadeTo(0,800);on=false}
   const b=$('#mus');if(b)b.classList.toggle('off',!on)}
-function mkbtn(){const b=document.createElement('button');b.id='mus';b.className='off';b.setAttribute('aria-label','Toggle music');b.textContent='♪';b.onclick=()=>{if(on){muted=true;music(0)}else{muted=false;music(1)}};document.body.appendChild(b);
+let autoArmed=false;
+/* Browsers block sound until the visitor interacts; try now, and retry on the first tap/scroll/key */
+function armAuto(){if(autoArmed)return;autoArmed=true;
+  const evs=['pointerdown','pointerup','touchstart','touchend','mousedown','mouseup','keydown','click','wheel','scroll'];
+  const go=e=>{if(e&&e.target&&e.target.closest&&e.target.closest('#mus'))return;if(muted||on){if(on)cleanup();return}music(1);setTimeout(()=>{if(on)cleanup()},300)};
+  const cleanup=()=>{evs.forEach(v=>removeEventListener(v,go,true));autoArmed=false};
+  evs.forEach(v=>addEventListener(v,go,{capture:true,passive:true}))}
+function mkbtn(){
   document.addEventListener('visibilitychange',()=>{if(au&&fileOk){if(document.hidden)au.pause();else if(on)au.play().catch(()=>{});return}if(!ac)return;if(document.hidden)ac.suspend();else if(on)ac.resume()})}
 let st=0;
 const html=document.documentElement;
@@ -363,7 +378,7 @@ function motion(){
   $$('#app .bloom').forEach(el=>gsap.from(el,{scale:0,rotation:-50,transformOrigin:'0% 0%',duration:1.6,ease:'back.out(1.5)',scrollTrigger:{trigger:el,start:'top 95%'}}));
   $$('.px').forEach(el=>gsap.fromTo(el,{yPercent:-8,scale:1.15},{yPercent:8,scale:1,ease:'none',scrollTrigger:{trigger:el.closest('.s'),start:'top bottom',end:'bottom top',scrub:true}}));
 }
-build();tick();setInterval(tick,1000);fx();mkbtn();html.classList.add('lock');
+build();tick();setInterval(tick,1000);fx();mkbtn();html.classList.add('lock');if(!muted)music(1);
 $('#env').onclick=openEnv;$('#skip').onclick=finish;$('#explore').onclick=finish;$('#replay').onclick=replay;
 $('#rsvp').onsubmit=e=>{e.preventDefault();
   const yes=document.querySelector('input[name=at]:checked').value==='yes',n=$('#gn').value.trim(),g=$('#gc').value,m=$('#gm').value.trim();
